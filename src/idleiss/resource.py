@@ -1,3 +1,5 @@
+from idleiss.fleet import FleetManager
+
 class Location_Already_Exists(Exception):
     def __init__(self, value):
         self.value = value
@@ -20,6 +22,8 @@ class ResourceManager(object):
         self.advanced_materials_income = 0
         self.money_income = 0
         self.income_sources = {}
+        self.owned_systems = []
+        self.owned_system_count = 0
         #income sources are a nested dict of
         # {starsystem:{
         #       location:
@@ -89,25 +93,48 @@ class ResourceManager(object):
         else:
             raise Location_Does_Not_Exist(str(location)+"@"+str(system)+" does not exist.")
 
-    def init_conquer_new_system():
+    def conquer_new_system_check(self, system):
+        """
+        Using a Large Structure Gantry a TCU can be onlined in an unclaimed system
+        Need:
+            Large Structure Gantry
+            Resources to upgrade Gantry
+            Unclaimed system
+        """
+        if not system.fleets[self.player_name].contains_ship("Large Structure Gantry"):
+            return False
+        if system.owner is not None:
+            return False
+        if self.calculate_TCU_cost() > self.money:
+            return False
+        if self.calculate_TCU_minerals() > self.basic_materials:
+            return False
+        return True
+
+    def init_conquer_new_system(self, system):
         """
         Using a Large Structure Gantry a TCU can be onlined in an unclaimed system
         """
-        pass
+        if conquer_new_system_check():
+            if not system.fleets[self.player_name].remove_ship("Large Structure Gantry", 1):
+                return False
+            self.owned_system_count += 1
+            system.owner = self.player_name
+            self.owned_systems.append(system)
 
-    def construct_citadel():
+    def construct_citadel(self, system):
         """
         Citadels will function as money generators (mission hubs), consumes Small Structure Gantry
         """
         pass
 
-    def construct_drilling_platform():
+    def construct_drilling_platform(self, system):
         """
         Drilling Platforms will function as basic material generators, consumes Small Structure Gantry
         """
         pass
 
-    def construct_industrial_array():
+    def construct_industrial_array(self, system):
         """
         Industrial Arrays will produce ships and structures, consumes Small Structure Gantry
         """
