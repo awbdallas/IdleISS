@@ -1,4 +1,4 @@
-from os.path import join, dirname, abspath
+from os.path import join, dirname
 from unittest import TestCase
 
 from idleiss import ship
@@ -23,26 +23,26 @@ class FleetLibraryTestCase(TestCase):
         self.library = ship.ShipLibrary(target_path)
         schema = self.library.get_ship_schemata('Small Cargo')
         self.assertEqual(schema, ship.ShipSchema('Small Cargo', 'Small Cargo',
-            10, 0, 200, [], 3, 1,
-            ship.ShipBuffs(10, 0, 0, 0),
-            ship.ShipDebuffs(0, 0, 0, 0), 2, False, False))
+                                                 10, 0, 200, [], 3, 1,
+                                                 ship.ShipBuffs(10, 0, 0, 0),
+                                                 ship.ShipDebuffs(0, 0, 0, 0), 2, False, False))
 
     def test_load_fail_incorrect_priority_target(self):
         test_file_name = 'invalidpriority_target.json'
         target_path = join(dirname(__file__), 'data', test_file_name)
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError) as _:
             self.library = ship.ShipLibrary(target_path)
 
     def test_load_fail_no_shield(self):
         test_file_name = 'noshield.json'
         target_path = join(dirname(__file__), 'data', test_file_name)
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError) as _:
             self.library = ship.ShipLibrary(target_path)
 
     def test_priority_target_refers_to_nonexistant_ship(self):
         test_file_name = 'invalidpriority_target.json'
         target_path = join(dirname(__file__), 'data', test_file_name)
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError) as _:
             self.library = ship.ShipLibrary(target_path)
 
     def test_library_structure_load(self):
@@ -73,8 +73,8 @@ class FleetLibraryTestCase(TestCase):
                             "weapon_size": "frigate",
                             "firepower": 120,
                             "priority_targets": [
-                                ["cruiser",],
-                                ["battleship",],
+                                ["cruiser", ],
+                                ["battleship", ],
                             ],
                         }
                     ],
@@ -94,7 +94,7 @@ class FleetLibraryTestCase(TestCase):
                             "firepower": 400,
                             "area_of_effect": 20,
                             "priority_targets": [
-                                ["frigate",],
+                                ["frigate", ],
                             ],
                         },
                         {
@@ -124,7 +124,6 @@ class FleetLibraryTestCase(TestCase):
         })
         self.assertEqual(library.get_ship_schemata('Astrahaus').is_structure, True)
 
-
     def test_library_order(self):
         library = ship.ShipLibrary()
         library._load({
@@ -150,8 +149,8 @@ class FleetLibraryTestCase(TestCase):
                             "weapon_size": "frigate",
                             "firepower": 120,
                             "priority_targets": [
-                                ["cruiser",],
-                                ["battleship",],
+                                ["cruiser", ],
+                                ["battleship", ],
                             ],
                         }
                     ],
@@ -170,8 +169,8 @@ class FleetLibraryTestCase(TestCase):
                             "weapon_size": "cruiser",
                             "firepower": 330,
                             "priority_targets": [
-                                ["frigate",],
-                                ["battleship",],
+                                ["frigate", ],
+                                ["battleship", ],
                             ],
                         }
                     ],
@@ -190,8 +189,8 @@ class FleetLibraryTestCase(TestCase):
                             "weapon_size": "battleship",
                             "firepower": 650,
                             "priority_targets": [
-                                ["battleship",],
-                                ["cruiser",],
+                                ["battleship", ],
+                                ["cruiser", ],
                             ],
                         }
                     ],
@@ -203,4 +202,4 @@ class FleetLibraryTestCase(TestCase):
         })
 
         self.assertEqual([schema.name for schema in library.ordered_ship_data],
-            ['rifter', 'stabber', 'tempest'])
+                         ['rifter', 'stabber', 'tempest'])

@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from idleiss import resource
 
+
 class ResourceTestCase(TestCase):
     def test_resource_payment(self):
         resources = resource.ResourceManager()
@@ -19,12 +20,13 @@ class ResourceTestCase(TestCase):
         self.assertEqual(resources.basic_materials_income, 50)
         self.assertEqual(resources.advanced_materials_income, 50)
         self.assertEqual(resources.money_income, 100)
-        self.assertEqual(resources.income_sources, {"Sol": {"Earth": ["planet", 50, 50 , 100]}})
+        self.assertEqual(resources.income_sources, {"Sol": {"Earth": ["planet", 50, 50, 100]}})
         resources.add_income_source("Sol", "Moon", "moon", 5, 5, 10)
         self.assertEqual(resources.basic_materials_income, 55)
         self.assertEqual(resources.advanced_materials_income, 55)
         self.assertEqual(resources.money_income, 110)
-        self.assertEqual(resources.income_sources, {"Sol": {"Earth": ["planet", 50, 50 , 100], "Moon": ["moon", 5, 5, 10]}})
+        self.assertEqual(resources.income_sources,
+                         {"Sol": {"Earth": ["planet", 50, 50, 100], "Moon": ["moon", 5, 5, 10]}})
 
     def test_resource_source_removal(self):
         resources = resource.ResourceManager()
@@ -60,7 +62,8 @@ class ResourceTestCase(TestCase):
         resources.money_income = 0
         with self.assertRaises(ValueError) as context:
             resources.remove_income_source("Sol", "Earth")
-        self.assertEqual(str(context.exception), "Income is negative after removing income source Earth@Sol: -50 -50 -100")
+        self.assertEqual(str(context.exception),
+                         "Income is negative after removing income source Earth@Sol: -50 -50 -100")
 
     def test_update_source_income(self):
         resources = resource.ResourceManager()

@@ -3,7 +3,6 @@ from unittest import TestCase
 from idleiss import fleet
 from idleiss.ship import ShipLibrary
 
-import random
 
 class ShipLibraryMock(ShipLibrary):
 
@@ -22,7 +21,7 @@ class ShipLibraryMock(ShipLibrary):
                         "weapon_size": "one",
                         "firepower": 50,
                         "priority_target": [
-                            ["ship1",],
+                            ["ship1"],
                         ],
                     },
                 ],
@@ -33,9 +32,6 @@ class ShipLibraryMock(ShipLibrary):
 
 
 class FleetTestCase(TestCase):
-
-    def setUp(self):
-        pass
 
     def test_build_ship(self):
         fm = fleet.FleetManager(ships={})

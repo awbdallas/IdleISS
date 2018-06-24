@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from idleiss.user import User
 
+
 class LibraryStub(object):
     def __init__(self):
         self.size_data = [
@@ -22,7 +23,7 @@ class LibraryStub(object):
                         "weapon_size": "one",
                         "firepower": 50,
                         "priority_targets": [
-                            ["ship1",],
+                            ["ship1", ],
                         ],
                     },
                 ],
@@ -33,12 +34,16 @@ class LibraryStub(object):
 
     def ship_shield(self, name):
         return self.ship_data[name]['shield']
+
     def ship_armor(self, name):
         return self.ship_data[name]['armor']
+
     def ship_hull(self, name):
         return self.ship_data[name]['hull']
+
     def ship_firepower(self, name):
         return self.ship_data[name]['firepower']
+
 
 class UserTestCase(TestCase):
 

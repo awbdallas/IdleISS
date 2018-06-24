@@ -1,5 +1,5 @@
-from unittest import TestCase
 from os.path import join, dirname
+from unittest import TestCase
 
 from idleiss import core
 
@@ -16,13 +16,6 @@ class CoreTestCase(TestCase):
     def test_base_game(self):
         engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
         self.assertTrue(engine)
-
-    # def test_user_interaction(self):
-        # engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
-        # engine.user_logged_in('an_user', timestamp=1000)
-        # engine.user_room_message('an_user', 'some_message', timestamp=1006)
-        # idleness = engine.get_user_current_idleduration('an_user', timestamp=1010)
-        # self.assertEqual(idleness, 4)
 
     def test_update_world_basic(self):
         engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
@@ -64,7 +57,7 @@ class CoreTestCase(TestCase):
         self.assertEqual(engine.users['user2'].resources.basic_materials, 1)
 
         engine.update_world(active_list=user_list, timestamp=1002)
-        #now user1 should have 2, while user2 still has only 1
+        # now user1 should have 2, while user2 still has only 1
         self.assertEqual(engine.users['user1'].resources.basic_materials, 2)
         self.assertEqual(engine.users['user2'].resources.basic_materials, 1)
 
@@ -82,23 +75,6 @@ class CoreTestCase(TestCase):
         self.assertEqual(engine.users['an_user'].resources.basic_materials, 1100)
         self.assertEqual(engine.users['an_user'].resources.advanced_materials, 1100)
         self.assertEqual(engine.users['an_user'].resources.money, 1100)
-
-    # def test_events_user_spoke(self):
-        # engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
-        # engine.user_logged_in('an_user', timestamp=1000)
-        # engine.update_world(timestamp=1050)
-        # self.assertEqual(events, {
-            # 'an_user': {
-                # 'new_level': 6,
-            # }
-        # })
-        # engine.user_room_message('an_user', 'some_message', timestamp=1051)
-        # engine.update_world(timestamp=1053)
-        ##would not trigger the lower level events again
-        # self.assertEqual(events, {})
-
-        ##user level should not decrement either.
-        # self.assertEqual(engine.users['an_user']['level'], 6)
 
     def test_backwards_in_time_failure(self):
         engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
@@ -121,10 +97,6 @@ class CoreTestCase(TestCase):
         def time_dependent_event(timestamp):
             return timestamp
 
-        def time_independent_event():
-            # if there is even such a thing.
-            return
-
         engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
         engine.update_world(active_list=set(), timestamp=100)
         engine.add_event(time_dependent_event, timestamp=50)
@@ -139,28 +111,3 @@ class CoreTestCase(TestCase):
         # bad things probably will happen.  Problem belongs to the user
         # of the engine, i.e. the chatroom interface.
 
-    # def test_handle_incoming_thread_disaster(self):
-        # engine = core.GameEngine(path_to_file('Small_Universe_Config.json'), path_to_file('validload.json'))
-        # engine.update_world(timestamp=100)
-        # engine.user_logged_out('an_user', 100)
-        # engine.user_logged_in('an_user', 100)
-        # engine.users['an_user'].resources.basic_materials_income = 1
-        # engine.user_logged_out('an_user', 101)
-        # engine.user_logged_out('an_user', 100)
-        # engine.user_logged_in('an_user', 100)
-        # engine.user_logged_in('an_user', 101)
-        # engine.user_logged_out('an_user', 101)
-        # engine.user_logged_in('an_user', 100)
-        # engine.update_world(timestamp=102)
-        # honestly I have no idea what the result _should_ be
-
-        # for now, let's say it is supposed to be logged out since that
-        # was the event with the "newest" timestamp and the newest
-        # event sent to the engine
-        # test_user = engine.users['an_user']
-        # self.assertEqual(test_user.online, False) #currently True
-        # self.assertEqual(test_user.online_at, 101) #currently 100
-        # self.assertEqual(test_user.offline_at, 101) #currently passes (101)
-        # self.assertEqual(test_user.total_idle_time, 1) #currently 4 (:ohdear:)
-        # self.assertEqual(test_user.last_payout, 101) #currently 102
-        # self.assertEqual(test_user.resources.basic_materials, 1) #currently 4
